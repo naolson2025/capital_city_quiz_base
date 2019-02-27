@@ -37,9 +37,17 @@ randomCountryElement.innerHTML = random_country_code.name;
 
 submitButton.addEventListener('click', function () {
     fetch(url).then( (res) => {
-        return res.json()
+        //Error handling found on StackOverflow
+        if (res.ok){
+            return res.json()
+        } else {
+            resultTextElement.innerHTML = "Error: This data isn't available at the time.";
+            throw new Error("This data isn't available at the time.");
+        }
+
     }).then((json) =>{
         console.log(json);
+
         //access second array in json
         let json_array = json[1];
         //access object in second array in json
@@ -53,7 +61,10 @@ submitButton.addEventListener('click', function () {
         else{
             resultTextElement.innerHTML = "Incorrect the answer was " + capital_city;
         }
-    });
+    }).catch((error) =>{
+        resultTextElement.innerHTML = "Error: This data isn't available at the time.";
+        console.log("Error: This data isn't available at the time.")
+    })
 });
 
 //When play again is clicked
